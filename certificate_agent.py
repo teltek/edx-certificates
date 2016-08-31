@@ -102,6 +102,14 @@ def main():
                     issued_date=issued_date,
                 )
                 last_course = course_id
+            else:
+                cert.init_cert_data_params(
+                    course_id=course_id,
+                    long_org=None,
+                    long_course=course_name.encode('utf-8'),
+                    issued_date=issued_date,
+                    cert_data=None,
+                    )
             if action in ['remove', 'regen']:
                 cert.delete_certificate(xqueue_body['delete_download_uuid'],
                                         xqueue_body['delete_verify_uuid'])

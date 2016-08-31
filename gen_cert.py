@@ -219,24 +219,8 @@ class CertificateGen(object):
         self.aws_id = str(aws_id)
         self.aws_key = str(aws_key)
 
-        settings.reload_cert_data()
-        cert_data = settings.CERT_DATA.get(course_id, {})
-        self.cert_data = cert_data
-
-        def interstitial_factory():
-            """ Generate default values for interstitial_texts defaultdict """
-            return itertools.repeat(cert_data.get('interstitial', {}).get('Pass', '')).next
-
-        # lookup long names from the course_id
-        try:
-            self.long_org = long_org or cert_data.get('LONG_ORG', '').encode('utf-8') or settings.DEFAULT_ORG
-            self.long_course = long_course or cert_data.get('LONG_COURSE', '').encode('utf-8')
-            self.issued_date = issued_date or cert_data.get('ISSUED_DATE', '').encode('utf-8') or 'ROLLING'
-            self.interstitial_texts = collections.defaultdict(interstitial_factory())
-            self.interstitial_texts.update(cert_data.get('interstitial', {}))
-        except KeyError:
-            log.critical("Unable to lookup long names for course {0}".format(course_id))
-            raise
+        cert_data = self._get_cert_data(course_id)
+        self.init_cert_data_params(course_id, long_org, long_course, issued_date, cert_data)
 
         # if COURSE or ORG is set in the configuration attempt to parse.
         # This supports both new and old style course keys.
@@ -270,6 +254,30 @@ class CertificateGen(object):
         self.cert_label_singular = cert_data.get('CERTS_ARE_CALLED', CERTS_ARE_CALLED)
         self.cert_label_plural = cert_data.get('CERTS_ARE_CALLED_PLURAL', CERTS_ARE_CALLED_PLURAL)
         self.course_association_text = cert_data.get('COURSE_ASSOCIATION_TEXT', 'a course of study')
+
+    def _get_cert_data(self, course_id=None):
+        settings.reload_cert_data()
+        cert_data = settings.CERT_DATA.get(course_id, {})
+        self.cert_data = cert_data
+        return cert_data
+
+    def _interstitial_factory(self, cert_data=None):
+        """ Generate default values for interstitial_texts defaultdict """
+        return itertools.repeat(cert_data.get('interstitial', {}).get('Pass', '')).next
+
+    def init_cert_data_params(self, course_id=None, long_org=None, long_course=None, issued_date=None, cert_data=None):
+        if not cert_data:
+            cert_data = self._get_cert_data(course_id)
+        # lookup long names from the course_id
+        try:
+            self.long_org = long_org or cert_data.get('LONG_ORG', '').encode('utf-8') or settings.DEFAULT_ORG
+            self.long_course = long_course or cert_data.get('LONG_COURSE', '').encode('utf-8')
+            self.issued_date = issued_date or cert_data.get('ISSUED_DATE', '').encode('utf-8') or 'ROLLING'
+            self.interstitial_texts = collections.defaultdict(self._interstitial_factory(cert_data))
+            self.interstitial_texts.update(cert_data.get('interstitial', {}))
+        except KeyError:
+            log.critical("Unable to lookup long names for course {0}".format(course_id))
+            raise
 
     def delete_certificate(self, delete_download_uuid, delete_verify_uuid):
         # TODO remove/archive an existing certificate
