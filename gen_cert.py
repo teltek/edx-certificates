@@ -1986,7 +1986,7 @@ class CertificateGen(object):
                 paragraph_string = u"<b><i>{0}</i></b>".format(aux)
             elif len(aux[position:]) > 90:
                 second_position = self._get_blank_position(aux[position:])
-                second_position = position  second_position
+                second_position = position + second_position
                 paragraph_string = u"<b><i>{0}</i></b><br/><br/><b><i>{1}</i></b><br/><br/><b><i>{2}</i></b>".format(aux[0:position], aux[position:second_position], aux[second_position:])
             else:
                 paragraph_string = u"<b><i>{0}</i></b><br/><br/>" \
