@@ -219,6 +219,7 @@ class CertificateGen(object):
         self.aws_id = str(aws_id)
         self.aws_key = str(aws_key)
 
+        settings.reload_cert_data()
         cert_data = settings.CERT_DATA.get(course_id, {})
         self.cert_data = cert_data
 
