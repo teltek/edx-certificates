@@ -471,7 +471,7 @@ class CertificateGen(object):
             0.302, 0.306, 0.318)
         styleOpenSansLight.alignment = TA_LEFT
 
-        paragraph_string = "Este certificado de aprovechamiento certifica que"
+        paragraph_string = "Esta credencial certifica que"
         paragraph = Paragraph(paragraph_string, styleOpenSansLight)
         paragraph.wrapOn(c, WIDTH * mm, HEIGHT * mm)
         paragraph.drawOn(c, LEFT_INDENT * mm, 132.5 * mm)
@@ -573,10 +573,10 @@ class CertificateGen(object):
             0.302, 0.306, 0.318)
         styleOpenSansLight.alignment = TA_LEFT
 
-        paragraph_string = "un curso de estudio ofrecido por <b>{0}</b>" \
-                           ", una iniciativa de apredizaje online<br /><br />" \
-                           "<b>{1}</b> mediante <b>Open edX</b>.".format(
-                               self.org, self.long_org.decode('utf-8'))
+        paragraph_string = u"un curso de 25 horas ofrecido por <b>{0}</b>" \
+                           " en <b>UNED Abierta</b>,<br/><br/>" \
+                           "la iniciativa de aprendizaje online " \
+                           "de la <b>UNED</b>.".format(self.long_org.decode('utf-8'))
 
         paragraph = Paragraph(paragraph_string, styleOpenSansLight)
         paragraph.wrapOn(c, WIDTH * mm, HEIGHT * mm)
@@ -590,8 +590,8 @@ class CertificateGen(object):
             0.302, 0.306, 0.318)
         styleOpenSansLight.alignment = TA_CENTER
 
-        paragraph_string = "CERTIFICADO DE APROVECHAMIENTO<br/>" \
-            "*La autenticidad de este certificado de aprovechamiento puede ser verificada en " \
+        paragraph_string = "CREDENCIAL<br/>" \
+            "*La autenticidad de esta credencial puede ser verificada en " \
             "<a href='{verify_url}/{verify_path}/{verify_uuid}/valid.html'>" \
             "{verify_url}/{verify_path}/{verify_uuid}/valid.html</a>"
 
@@ -861,7 +861,7 @@ class CertificateGen(object):
 
         # ELEM: Metacopy - Org: a course of study...
         y_offset = pos_metacopy_org_y
-        paragraph_string = "{2} offered by {0}" \
+        paragraph_string = u"{2} offered by {0}" \
                            ", an online learning<br /><br />initiative of " \
                            "{1} through edX.".format(
                                self.org, self.long_org.decode('utf-8'), self.course_association_text)
