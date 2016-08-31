@@ -38,6 +38,8 @@ import arabic_reshaper
 
 from opaque_keys.edx.keys import CourseKey
 
+from urlparse import urlparse
+
 reportlab.rl_config.warnOnMissingFontGlyphs = 0
 
 
@@ -1164,6 +1166,9 @@ class CertificateGen(object):
         )
         type_map['honor']['img'] = ""
 
+        edx_url_parse = urlparse(download_url)
+        edx_url = edx_url_parse.scheme + '://' + edx_url_parse.netloc
+
         with open("{0}/{1}".format(TEMPLATE_DIR, valid_template)) as f:
             valid_page = f.read().decode('utf-8')
         valid_page = valid_page.format(
@@ -1183,6 +1188,8 @@ class CertificateGen(object):
             CERTS_ARE_CALLED=CERTS_ARE_CALLED.title(),
             CERTS_ARE_CALLED_PLURAL=CERTS_ARE_CALLED_PLURAL.title(),
             EXPLANATION=type_map[self.template_type]['explanation'],
+            DOWNLOAD_URL=download_url,
+            EDX_URL=edx_url
         )
 
         with open(os.path.join(
@@ -1198,7 +1205,9 @@ class CertificateGen(object):
                 CERTS_ARE_CALLED=CERTS_ARE_CALLED.title(),
                 CERTS_ARE_CALLED_PLURAL=CERTS_ARE_CALLED_PLURAL.title(),
                 VERIFY_URL=verify_page_url,
-                PDF_FILE=os.path.basename(download_url)
+                PDF_FILE=os.path.basename(download_url),
+                DOWNLOAD_URL=download_url,
+                EDX_URL=edx_url
             )
 
         with open(os.path.join(
