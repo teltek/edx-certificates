@@ -560,8 +560,8 @@ class CertificateGen(object):
             0, 0.624, 0.886)
         styleOpenSans.alignment = TA_LEFT
 
-        paragraph_string = u"<b><i>{0}: {1}</i></b>".format(
-            self.course, self.long_course.decode('utf-8'))
+        paragraph_string = self._build_paragraph()
+
         paragraph = Paragraph(paragraph_string, styleOpenSans)
         # paragraph.wrapOn(c, WIDTH * mm, HEIGHT * mm)
         if 'PH207x' in self.course:
@@ -572,7 +572,7 @@ class CertificateGen(object):
             paragraph.drawOn(c, LEFT_INDENT * mm, 95 * mm)
         else:
             paragraph.wrapOn(c, WIDTH * mm, HEIGHT * mm)
-            paragraph.drawOn(c, LEFT_INDENT * mm, 99 * mm)
+            paragraph.drawOn(c, LEFT_INDENT * mm, 94 * mm)
 
         # A course of study..
 
@@ -1972,3 +1972,37 @@ class CertificateGen(object):
             )
 
         return (download_uuid, verify_uuid, download_url)
+
+    def _build_paragraph(self):
+        """
+        In case the course title is too long,
+        we break it into two or three line
+        in the point where there is a blank space
+        """
+        aux = u"{0}: {1}".format(self.course.decode('utf-8'), self.long_course.decode('utf-8'))
+        if len(aux) > 90:
+            position = self._get_blank_position(aux)
+            if position == -1:
+                paragraph_string = u"<b><i>{0}</i></b>".format(aux)
+            elif len(aux[position:]) > 90:
+                second_position = self._get_blank_position(aux[position:])
+                second_position = position  second_position
+                paragraph_string = u"<b><i>{0}</i></b><br/><br/><b><i>{1}</i></b><br/><br/><b><i>{2}</i></b>".format(aux[0:position], aux[position:second_position], aux[second_position:])
+            else:
+                paragraph_string = u"<b><i>{0}</i></b><br/><br/>" \
+                                   "<b><i>{1}</i></b>".format(
+                    aux[0:position], aux[position:])
+        else:
+            paragraph_string = u"<b><i>{0}</i></b>".format(aux)
+        return paragraph_string
+
+    def _get_blank_position(self, title):
+        """
+        Backwards position with the closest blank space
+        """
+        position = -1
+        for i in range(0, 89):
+            if title[90-i] == ' ':
+                position = 90 - i
+                break
+        return position
