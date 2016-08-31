@@ -441,26 +441,6 @@ class CertificateGen(object):
         LEFT_INDENT = 49  # mm from the left side to write the text
         RIGHT_INDENT = 49  # mm from the right side for the CERTIFICATE
 
-        # CERTIFICATE
-
-        styleOpenSansLight.fontSize = 19
-        styleOpenSansLight.leading = 10
-        styleOpenSansLight.textColor = colors.Color(0.302, 0.306, 0.318)
-        styleOpenSansLight.alignment = TA_LEFT
-
-        paragraph_string = "CERTIFICATE"
-
-        # Right justified so we compute the width
-        width = stringWidth(
-            paragraph_string,
-            'OpenSans-Light',
-            19,
-        ) / mm
-        paragraph = Paragraph("{0}".format(
-            paragraph_string), styleOpenSansLight)
-        paragraph.wrapOn(c, WIDTH * mm, HEIGHT * mm)
-        paragraph.drawOn(c, (WIDTH - RIGHT_INDENT - width) * mm, 163 * mm)
-
         # Issued ..
 
         styleOpenSansLight.fontSize = 12
@@ -469,7 +449,7 @@ class CertificateGen(object):
             0.302, 0.306, 0.318)
         styleOpenSansLight.alignment = TA_LEFT
 
-        paragraph_string = "Issued {0}".format(self.issued_date)
+        paragraph_string = "{0}".format(self.issued_date)
 
         # Right justified so we compute the width
         width = stringWidth(
@@ -490,7 +470,7 @@ class CertificateGen(object):
             0.302, 0.306, 0.318)
         styleOpenSansLight.alignment = TA_LEFT
 
-        paragraph_string = "This is to certify that"
+        paragraph_string = "Este certificado de aprovechamiento certifica que"
         paragraph = Paragraph(paragraph_string, styleOpenSansLight)
         paragraph.wrapOn(c, WIDTH * mm, HEIGHT * mm)
         paragraph.drawOn(c, LEFT_INDENT * mm, 132.5 * mm)
@@ -536,11 +516,7 @@ class CertificateGen(object):
             0.302, 0.306, 0.318)
         styleOpenSansLight.alignment = TA_LEFT
 
-        paragraph_string = "successfully completed"
-        if '7.00x' in self.course:
-            paragraph_string = "successfully completed the inaugural offering of"
-        else:
-            paragraph_string = "successfully completed"
+        paragraph_string = "ha completado satisfactoriamente"
 
         paragraph = Paragraph(paragraph_string, styleOpenSansLight)
 
@@ -569,7 +545,7 @@ class CertificateGen(object):
             styleOpenSans.fontSize = 20
             styleOpenSans.leading = 10
         else:
-            styleOpenSans.fontSize = 24
+            styleOpenSans.fontSize = 13
             styleOpenSans.leading = 10
         styleOpenSans.textColor = colors.Color(
             0, 0.624, 0.886)
@@ -596,9 +572,9 @@ class CertificateGen(object):
             0.302, 0.306, 0.318)
         styleOpenSansLight.alignment = TA_LEFT
 
-        paragraph_string = "a course of study offered by <b>{0}</b>" \
-                           ", an online learning<br /><br />initiative of " \
-                           "<b>{1}</b> through <b>edX</b>.".format(
+        paragraph_string = "un curso de estudio ofrecido por <b>{0}</b>" \
+                           ", una iniciativa de apredizaje online<br /><br />" \
+                           "<b>{1}</b> mediante <b>Open edX</b>.".format(
                                self.org, self.long_org.decode('utf-8'))
 
         paragraph = Paragraph(paragraph_string, styleOpenSansLight)
@@ -613,8 +589,8 @@ class CertificateGen(object):
             0.302, 0.306, 0.318)
         styleOpenSansLight.alignment = TA_CENTER
 
-        paragraph_string = "HONOR CODE CERTIFICATE<br/>" \
-            "*Authenticity of this certificate can be verified at " \
+        paragraph_string = "CERTIFICADO DE APROVECHAMIENTO<br/>" \
+            "*La autenticidad de este certificado de aprovechamiento puede ser verificada en " \
             "<a href='{verify_url}/{verify_path}/{verify_uuid}/valid.html'>" \
             "{verify_url}/{verify_path}/{verify_uuid}/valid.html</a>"
 
