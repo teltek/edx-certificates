@@ -1207,7 +1207,8 @@ class CertificateGen(object):
                 VERIFY_URL=verify_page_url,
                 PDF_FILE=os.path.basename(download_url),
                 DOWNLOAD_URL=download_url,
-                EDX_URL=edx_url
+                EDX_URL=edx_url,
+                SIGNATURE=signed_data
             )
 
         with open(os.path.join(
